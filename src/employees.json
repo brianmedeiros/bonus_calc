@@ -1,0 +1,74 @@
+[
+    {
+        "team": "Executive",
+        "title": "Executive",
+        "Prefix": "Mr",
+        "fName": "Moshe",
+        "lName": "Roth",
+        "salary": 250000,
+        "birthday": "1980-05-15"
+    },
+    {
+        "team": "Supervisor",
+        "title": "Store",
+        "Prefix": "Mr",
+        "fName": "Chaim",
+        "lName": "Stark",
+        "salary": 150000,
+        "birthday": "1985-07-20"
+    },
+    {
+        "team": "Supervisor",
+        "title": "Warehouse",
+        "Prefix": "Mr",
+        "fName": "Moshe",
+        "lName": "Spira",
+        "salary": 160000,
+        "birthday": "1990-08-25"
+    },
+    {
+        "team": "Manager",
+        "title": "Applications",
+        "Prefix": "Mr",
+        "fName": "Yehuda",
+        "lName": "Gold",
+        "salary": 120000,
+        "birthday": "1988-12-10"
+    },
+    {
+        "team": "Manager",
+        "title": "Website",
+        "Prefix": "Mrs",
+        "fName": "Miriam",
+        "lName": "Weiss",
+        "salary": 120000,
+        "birthday": "1992-03-30"
+    },
+    {
+        "team": "Employee",
+        "title": "Website",
+        "Prefix": "Mr",
+        "fName": "Shlomo",
+        "lName": "Green",
+        "salary": 65000,
+        "birthday": "1995-11-05"
+    },
+    {
+        "team": "Employee",
+        "title": "Website",
+        "Prefix": "Mrs",
+        "fName": "Ester",
+        "lName": "Silver",
+        "salary": 75000,
+        "birthday": "1993-06-18"
+    },
+    {
+        "team": "Employee",
+        "title": "Applications",
+        "Prefix": "Mr",
+        "fName": "Yakov",
+        "lName": "Weiser",
+        "salary": 70000,
+        "birthday": "1991-09-12"
+    }
+]
