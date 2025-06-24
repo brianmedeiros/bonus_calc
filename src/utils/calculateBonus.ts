@@ -1,8 +1,27 @@
 import type { Employee, WeatherData } from "../types";
 
-export const fetchWeather = async (date: string): Promise<WeatherData> => {
+// Get the most recent birthday date
+const getMostRecentBirthday = (birthday: string): string => {
+  const birthDate = new Date(birthday);
+  const today = new Date();
+
+  const currentYearBirthday = new Date(
+    today.getFullYear(),
+    birthDate.getMonth(),
+    birthDate.getDate()
+  );
+
+  if (currentYearBirthday > today) {
+    currentYearBirthday.setFullYear(today.getFullYear() - 1);
+  }
+
+  return currentYearBirthday.toISOString().split("T")[0]; // YYYY-MM-DD format
+};
+
+export const fetchWeather = async (birthday: string): Promise<WeatherData> => {
+    const recentBirthday = getMostRecentBirthday(birthday);
     // open-metro - weather using NYC as location
-    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=40.7143&longitude=-74.006&daily=temperature_2m_max&timezone=America%2FNew_York&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch&start_date=${date}&end_date=${date}`;
+    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=40.7143&longitude=-74.006&daily=temperature_2m_max&timezone=America%2FNew_York&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch&start_date=${recentBirthday}&end_date=${recentBirthday}`;
 
     const response = await fetch(apiUrl);
 
