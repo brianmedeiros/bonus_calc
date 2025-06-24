@@ -8,28 +8,28 @@ import type { EmployeeWithBonus, Employee } from "./types";
 import "./App.css";
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    const initEmployees = async () => {
-      const empWithBonuses: EmployeeWithBonus[] = await Promise.all(
-        (employeesData as Employee[]).map(async (emp) => {
-          const weather = await fetchWeather(emp.birthday);
-          const bonus = calculateBonus(emp, weather);
-          return { ...emp, bonus };
-        })
-      );
-      dispatch(setEmployees(empWithBonuses));
-    };
+    useEffect(() => {
+        const initEmployees = async () => {
+            const empWithBonuses: EmployeeWithBonus[] = await Promise.all(
+                (employeesData as Employee[]).map(async (emp) => {
+                    const weather = await fetchWeather(emp.birthday);
+                    const bonus = calculateBonus(emp, weather);
+                    return { ...emp, bonus };
+                })
+            );
+            dispatch(setEmployees(empWithBonuses));
+        };
 
-    initEmployees();
-  }, [dispatch]);
+        initEmployees();
+    }, [dispatch]);
 
-  return (
-    <div className="container mx-auto">
-      <EmployeeCards />
-    </div>
-  );
+    return (
+        <div className="container mx-auto">
+            <EmployeeCards />
+        </div>
+    );
 };
 
 export default App;
