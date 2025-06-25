@@ -16,7 +16,7 @@ const App: React.FC = () => {
                 (employeesData as Employee[]).map(async (emp) => {
                     const { temperatureF, dateUsed } = await fetchWeather(emp.birthday);
                     const bonus = calculateBonus(emp, { temperatureF });
-                    return { ...emp, bonus, bondusDate: dateUsed };
+                    return { ...emp, bonus, bonusDate: dateUsed };
                 })
             );
             dispatch(setEmployees(empWithBonuses));
