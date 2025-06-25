@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 import type { EmployeeWithBonus } from "../types";
 import { getManagerName } from "../utils/employeeHelpers";
 
@@ -9,6 +11,7 @@ interface Props {
 }
 
 const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => {
+    const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
     const panelRef = useRef<HTMLDivElement>(null);
 
     // Focus panel on open
@@ -50,7 +53,7 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
                         <p><strong>Title:</strong> {employee.title}</p>
                         <p><strong>Salary:</strong> ${employee.salary.toLocaleString()}</p>
                         <p><strong>Birthday:</strong> {employee.birthday}</p>
-                        <p><strong>Bonus:</strong> ${employee.bonus.toFixed(2)}</p>
+                        <p><strong>Bonus:</strong> <span className={`${extraBonus ? "text-green-800" : "text-black"}`}>${employee.bonus.toFixed(2)}</span></p>
                         <p><strong>Date for Bonus:</strong> {employee.bonusDate}</p>
                         <p><strong>Manager:</strong> {getManagerName(employee)}</p>
                     </div>
