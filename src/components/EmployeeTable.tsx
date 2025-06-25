@@ -11,8 +11,8 @@ const EmployeeTable: React.FC = () => {
     const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
 
     // State for selected employee, panel visibility
-    const [selectedEmployeeName, setSelectedEmployeeName] = useState<string | null>(null);
-    const selectedEmployee = useSelector((state: RootState) => state.employees.employees.find(emp => emp.lName === selectedEmployeeName) || null);
+    const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
+    const selectedEmployee = useSelector((state: RootState) => state.employees.employees.find(emp => emp.lName === selectedEmployeeId) || null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     // State for sorting table
@@ -38,7 +38,7 @@ const EmployeeTable: React.FC = () => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape' && isPanelOpen) {
                 setIsPanelOpen(false);
-                setSelectedEmployeeName(null); // Reset selected employee when closing panel
+                setSelectedEmployeeId(null); // Reset selected employee when closing panel
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -106,12 +106,12 @@ const EmployeeTable: React.FC = () => {
                     <tbody>
                         {sortedEmployees.map((emp) => (
                             // lname - with click to open panel
-                            <tr key={emp.lName} className="border-t hover:bg-gray-100">
+                            <tr key={emp.id} className="border-t hover:bg-gray-100">
                                 <td className="p-2">
                                     <button
                                         onClick={(e) => {
                                             lastFocusedButtonRef.current = e.currentTarget;
-                                            setSelectedEmployeeName(emp.lName);
+                                            setSelectedEmployeeId(emp.lName);
                                             setIsPanelOpen(true);
                                         }}
                                         className="text-blue-500 underline hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
@@ -121,7 +121,7 @@ const EmployeeTable: React.FC = () => {
                                 </td>
 
                                 <td className="p-2">{emp.birthday}</td>
-                                <td className={`p-2 font-medium ${ extraBonus ? "text-green-800" : "text-black" }`}>${emp.bonus.toFixed(2)}</td>
+                                <td className={`p-2 font-medium ${extraBonus ? "text-green-800" : "text-black"}`}>${emp.bonus.toFixed(2)}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -133,7 +133,7 @@ const EmployeeTable: React.FC = () => {
                     isOpen={isPanelOpen}
                     onClose={() => {
                         setIsPanelOpen(false);
-                        setSelectedEmployeeName(null);
+                        setSelectedEmployeeId(null);
                         setTimeout(() => {
                             lastFocusedButtonRef.current?.focus();
                         }, 0); // defer to next tick after panel unmount

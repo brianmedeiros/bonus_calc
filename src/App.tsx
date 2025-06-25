@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import employeesData from "./employees.json";
 import { useDispatch } from "react-redux";
 import { setEmployees } from "./store/employeeSlice";
+import { v4 as uuidv4 } from "uuid";
 import { fetchWeather, calculateBonus } from "./utils/calculateBonus";
 import EmployeeTable from "./components/EmployeeTable";
 import type { EmployeeWithBonus, Employee } from "./types";
@@ -13,12 +14,21 @@ const App: React.FC = () => {
     useEffect(() => {
         const initEmployees = async () => {
             const empWithBonuses: EmployeeWithBonus[] = await Promise.all(
-                (employeesData as Employee[]).map(async (emp) => {
-                    const { temperatureF, dateUsed } = await fetchWeather(emp.birthday);
-                    const bonus = calculateBonus(emp, { temperatureF });
-                    return { ...emp, bonus, bonusDate: dateUsed };
+                (employeesData as unknown[]).map(async (raw) => {
+                    const partial = raw as Omit<Employee, "id">;
+                    const fullEmployee: Employee = { ...partial, id: uuidv4() };
+
+                    const { temperatureF, dateUsed } = await fetchWeather(fullEmployee.birthday);
+                    const bonus = calculateBonus(fullEmployee, { temperatureF });
+
+                    return {
+                        ...fullEmployee,
+                        bonus,
+                        bonusDate: dateUsed,
+                    };
                 })
             );
+
             dispatch(setEmployees(empWithBonuses));
         };
 
