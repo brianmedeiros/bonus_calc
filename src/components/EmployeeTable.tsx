@@ -121,7 +121,7 @@ const EmployeeTable: React.FC = () => {
                                 </td>
 
                                 <td className="p-2">{emp.birthday}</td>
-                                <td className={`p-2 font-medium ${extraBonus ? "text-green-800" : "text-black"}`}>${emp.bonus.toFixed(2)}</td>
+                                <td className={`p-2 font-medium ${extraBonus ? "text-green-800" : "text-black"}`}>{emp.bonus.toLocaleString("en-US", { style: "currency", currency: "USD",})}</td>
                             </tr>
                         ))}
                     </tbody>

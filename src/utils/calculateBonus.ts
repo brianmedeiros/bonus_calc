@@ -23,7 +23,7 @@ export const fetchWeather = async (
 
 export const calculateBonus = (
     employee: Employee,
-    weather: WeatherData
+    weather: WeatherData,
 ): number => {
     let bonusPercentage = {
         Executive: 0.2,

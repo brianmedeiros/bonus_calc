@@ -51,9 +51,9 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
                     <div className="p-4 space-y-2">
                         <p><strong>Team:</strong> {employee.team}</p>
                         <p><strong>Title:</strong> {employee.title}</p>
-                        <p><strong>Salary:</strong> ${employee.salary.toLocaleString()}</p>
+                        <p><strong>Salary:</strong> {employee.salary.toLocaleString("en-US", { style: "currency", currency: "USD",})}</p>
                         <p><strong>Birthday:</strong> {employee.birthday}</p>
-                        <p><strong>Bonus:</strong> <span className={`${extraBonus ? "text-green-800" : "text-black"}`}>${employee.bonus.toFixed(2)}</span></p>
+                        <p><strong>Bonus:</strong> <span className={`${extraBonus ? "text-green-800" : "text-black"}`}>{employee.bonus.toLocaleString("en-US", { style: "currency", currency: "USD",})}</span></p>
                         <p><strong>Date for Bonus:</strong> {employee.bonusDate}</p>
                         <p><strong>Manager:</strong> {getManagerName(employee)}</p>
                     </div>
