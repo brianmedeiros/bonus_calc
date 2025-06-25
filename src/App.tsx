@@ -15,7 +15,7 @@ const App: React.FC = () => {
             const empWithBonuses: EmployeeWithBonus[] = await Promise.all(
                 (employeesData as Employee[]).map(async (emp) => {
                     const { temperatureF, dateUsed } = await fetchWeather(emp.birthday);
-                    const bonus = calculateBonus(emp, {temperatureF});
+                    const bonus = calculateBonus(emp, { temperatureF });
                     return { ...emp, bonus, bondusDate: dateUsed };
                 })
             );
@@ -26,8 +26,10 @@ const App: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <div className="container mx-auto">
-            <EmployeeTable />
+        <div className="min-h-screen w-full bg-cover bg-no-repeat bg-top bg-center" style={{ backgroundImage: "url('/bg.png')" }}>
+            <div className="container mx-auto">
+                <EmployeeTable />
+            </div>
         </div>
     );
 };
