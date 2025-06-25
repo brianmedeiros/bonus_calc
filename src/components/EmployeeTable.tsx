@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
 import { toggleExtraBonus } from "../store/employeeSlice";
@@ -10,13 +10,10 @@ const EmployeeTable: React.FC = () => {
     const employees = useSelector((state: RootState) => state.employees.employees);
     const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
 
-
-
     // State for selected employee, panel visibility
     const [selectedEmployeeName, setSelectedEmployeeName] = useState<string | null>(null);
     const selectedEmployee = useSelector((state: RootState) => state.employees.employees.find(emp => emp.lName === selectedEmployeeName) || null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
-
 
     // State for sorting table
     const [sortKey, setSortKey] = useState<'lName' | 'bonus'>('lName');
@@ -31,6 +28,24 @@ const EmployeeTable: React.FC = () => {
         if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
         return 0;
     });
+
+    // keys acssessibility
+    const lastFocusedButtonRef = useRef<HTMLButtonElement | null>(null);
+
+    useEffect(() => {
+        if (!isPanelOpen) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isPanelOpen) {
+                setIsPanelOpen(false);
+                setSelectedEmployeeName(null); // Reset selected employee when closing panel
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isPanelOpen]);
 
 
     return (
@@ -62,19 +77,14 @@ const EmployeeTable: React.FC = () => {
                             >
                                 Last Name{" "}
                                 <span className="text-blue-400">
-                                    {sortKey === 'lName'
-                                        ? sortOrder === 'asc'
-                                            ? '▲'
-                                            : '▼'
-                                        : '–'}
+                                    {sortKey === 'lName' ? sortOrder === 'asc' ? '▲' : '▼' : '–'}
                                 </span>
                             </th>
 
                             <th className="p-2 border-b">Birthday</th>
 
                             {/* bonus with toggle for sort */}
-                            <th
-                                className="p-2 border-b cursor-pointer select-none"
+                            <th className="p-2 border-b cursor-pointer select-none"
                                 onClick={() => {
                                     if (sortKey === 'bonus') {
                                         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -86,11 +96,7 @@ const EmployeeTable: React.FC = () => {
                             >
                                 Bonus{" "}
                                 <span className="text-blue-400">
-                                    {sortKey === 'bonus'
-                                        ? sortOrder === 'asc'
-                                            ? '▲'
-                                            : '▼'
-                                        : '-'}
+                                    {sortKey === 'bonus' ? sortOrder === 'asc' ? '▲' : '▼' : '-'}
                                 </span>
                             </th>
                         </tr>
@@ -99,14 +105,21 @@ const EmployeeTable: React.FC = () => {
 
                     <tbody>
                         {sortedEmployees.map((emp) => (
-                            // lname with click to open panel
+                            // lname - with click to open panel
                             <tr key={emp.lName} className="border-t hover:bg-gray-100">
-                                <td className="p-2 text-blue-400 underline cursor-pointer" onClick={() => {
-                                    setSelectedEmployeeName(emp.lName);
-                                    setIsPanelOpen(true);
-                                }}>
-                                    {emp.lName}
+                                <td className="p-2">
+                                    <button
+                                        onClick={(e) => {
+                                            lastFocusedButtonRef.current = e.currentTarget;
+                                            setSelectedEmployeeName(emp.lName);
+                                            setIsPanelOpen(true);
+                                        }}
+                                        className="text-blue-500 underline hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+                                    >
+                                        {emp.lName}
+                                    </button>
                                 </td>
+
                                 <td className="p-2">{emp.birthday}</td>
                                 <td className="p-2">${emp.bonus.toFixed(2)}</td>
                             </tr>
@@ -120,7 +133,10 @@ const EmployeeTable: React.FC = () => {
                     isOpen={isPanelOpen}
                     onClose={() => {
                         setIsPanelOpen(false);
-                        setSelectedEmployeeName(null); // <- update this!
+                        setSelectedEmployeeName(null);
+                        setTimeout(() => {
+                            lastFocusedButtonRef.current?.focus();
+                        }, 0); // defer to next tick after panel unmount
                     }}
                 />
 

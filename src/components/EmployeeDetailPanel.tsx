@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import type { EmployeeWithBonus } from "../types";
 import { getManagerName } from "../utils/employeeHelpers";
 
@@ -9,21 +9,42 @@ interface Props {
 }
 
 const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => {
+    const panelRef = useRef<HTMLDivElement>(null);
+
+    // Focus panel on open
+    useEffect(() => {
+        if (isOpen && employee && panelRef.current) {
+            panelRef.current.focus();
+        }
+    }, [employee, isOpen]);
+
+
     return (
-        <div className={`fixed top-0 right-0 h-full bg-white text-black shadow-lg transition-transform duration-300 ease-in-out z-50
+        <div
+            ref={panelRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="employee-panel-title"
+            className={`fixed top-0 right-0 h-full bg-white text-black shadow-lg transition-transform duration-300 ease-in-out z-50
         ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
-        w-full sm:w-[80%] md:w-[400px]`}
+        w-full sm:w-[80%] md:w-[400px] focus:outline-none`}
         >
             {employee ? (
                 <>
                     <div className="flex justify-between items-center p-4 border-b">
-                        <h2 className="text-xl font-semibold">
+                        <h2 id="employee-panel-title" className="text-xl font-semibold">
                             {employee.fName} {employee.lName}
                         </h2>
-                        <button onClick={onClose} className="text-red-500 text-2xl font-bold">
+                        <button
+                            onClick={onClose}
+                            className="text-red-500 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-red-400 rounded"
+                            aria-label="Close employee details"
+                        >
                             &times;
                         </button>
                     </div>
+
                     <div className="p-4 space-y-2">
                         <p><strong>Team:</strong> {employee.team}</p>
                         <p><strong>Title:</strong> {employee.title}</p>
