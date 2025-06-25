@@ -3,7 +3,7 @@ import employeesData from "./employees.json";
 import { useDispatch } from "react-redux";
 import { setEmployees } from "./store/employeeSlice";
 import { fetchWeather, calculateBonus } from "./utils/calculateBonus";
-import EmployeeCards from "./components/EmployeeCards";
+import EmployeeTable from "./components/EmployeeTable";
 import type { EmployeeWithBonus, Employee } from "./types";
 import "./App.css";
 
@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
     return (
         <div className="container mx-auto">
-            <EmployeeCards />
+            <EmployeeTable />
         </div>
     );
 };
