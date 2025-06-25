@@ -1,48 +1,5 @@
 import type { Employee, WeatherData } from "../types";
-import { DateTime } from "luxon";
-
-// Get the most recent same-day-of-month before today, adjusting for short months
-const getRecentBonusDate = (birthday: string): string => {
-    const birth = DateTime.fromISO(birthday);
-    const today = DateTime.now().setZone("America/New_York");
-
-    let bonusMonth = today.month;
-    let bonusYear = today.year;
-
-    // If today's day is before the birthday's day, move back a month
-    if (today.day < birth.day) {
-        bonusMonth -= 1;
-        if (bonusMonth < 1) {
-            bonusMonth = 12;
-            bonusYear -= 1;
-        }
-    }
-
-    // Try to construct that date in NY time
-    let bonusDate = DateTime.fromObject(
-        {
-            year: bonusYear,
-            month: bonusMonth,
-            day: birth.day,
-        },
-        { zone: "America/New_York" }
-    );
-
-    // If invalid (e.g., June 31), fallback to last day of the month
-    if (!bonusDate.isValid) {
-        bonusDate = DateTime.fromObject(
-            {
-                year: bonusYear,
-                month: bonusMonth,
-                day: DateTime.local(bonusYear, bonusMonth).daysInMonth,
-            },
-            { zone: "America/New_York" }
-        );
-    }
-
-    return bonusDate.toISODate() ?? "";
-};
-
+import { getRecentBonusDate } from "../utils/dateUtils";
 
 
 export const fetchWeather = async (
