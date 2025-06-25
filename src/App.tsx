@@ -14,9 +14,9 @@ const App: React.FC = () => {
         const initEmployees = async () => {
             const empWithBonuses: EmployeeWithBonus[] = await Promise.all(
                 (employeesData as Employee[]).map(async (emp) => {
-                    const weather = await fetchWeather(emp.birthday);
-                    const bonus = calculateBonus(emp, weather);
-                    return { ...emp, bonus };
+                    const { temperatureF, dateUsed } = await fetchWeather(emp.birthday);
+                    const bonus = calculateBonus(emp, {temperatureF});
+                    return { ...emp, bonus, bondusDate: dateUsed };
                 })
             );
             dispatch(setEmployees(empWithBonuses));
