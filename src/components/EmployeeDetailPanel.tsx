@@ -31,7 +31,7 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
             aria-labelledby="employee-panel-title"
             className={`fixed top-0 right-0 h-full bg-orange-200 text-black shadow-lg transition-transform duration-300 ease-in-out z-50
         ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
-        w-full sm:w-[80%] md:w-[400px] focus:outline-none`}
+        w-[80%] sm:w-[80%] md:w-[400px] focus:outline-none`}
         >
             {employee ? (
                 <>
