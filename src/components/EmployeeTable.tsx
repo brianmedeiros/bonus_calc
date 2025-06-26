@@ -6,6 +6,7 @@ import { toggleExtraBonus, updateAllBonuses } from "../store/employeeSlice";
 import { calculateTotalBonus, formatCurrency } from "../utils/employeeHelpers";
 import EmployeeDetailPanel from "./EmployeeDetailPanel";
 import type { EmployeeWithBonus } from "../types";
+import EmployeeTableRow from "./EmployeeTableRow";
 
 const BonusCell: React.FC<{ emp: EmployeeWithBonus; extraBonus: boolean }> = ({ emp, extraBonus }) => {
     const { total } = calculateTotalBonus(emp, extraBonus);
@@ -55,8 +56,8 @@ const EmployeeTable: React.FC = () => {
                     setSelectedEmployeeId(null);
                 }}
                 className={`mb-4 px-4 py-2 rounded font-semibold transition-colors duration-200 border ${extraBonus
-                        ? "bg-green-600 text-white border-green-900 hover:bg-green-700"
-                        : "bg-red-300 text-red-800 border-red-800 hover:bg-red-400"
+                    ? "bg-green-600 text-white border-green-900 hover:bg-green-700"
+                    : "bg-red-300 text-red-800 border-red-800 hover:bg-red-400"
                     }`}
             >
                 {extraBonus ? "Extra Bonus ON (+5%)" : "Extra Bonus OFF"}
@@ -113,28 +114,15 @@ const EmployeeTable: React.FC = () => {
 
                     <tbody>
                         {sortedEmployees.map((emp) => (
-                            <tr key={emp.id} className="border-t hover:bg-gray-100">
-                                <td
-                                    className="p-2 text-blue-400 underline cursor-pointer focus:outline-none focus:ring-2 ring-blue-400"
-                                    tabIndex={0}
-                                    role="button"
-                                    aria-label={`View details for ${emp.fName} ${emp.lName}`}
-                                    onClick={() => {
-                                        setSelectedEmployeeId(emp.id);
-                                        setIsPanelOpen(true);
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" || e.key === " ") {
-                                            setSelectedEmployeeId(emp.id);
-                                            setIsPanelOpen(true);
-                                        }
-                                    }}
-                                >
-                                    {emp.lName}
-                                </td>
-                                <td className="p-2">{emp.birthday}</td>
-                                <BonusCell emp={emp} extraBonus={extraBonus} />
-                            </tr>
+                            <EmployeeTableRow
+                                key={emp.id}
+                                employee={emp}
+                                extraBonus={extraBonus}
+                                onSelect={(id) => {
+                                    setSelectedEmployeeId(id);
+                                    setIsPanelOpen(true);
+                                }}
+                            />
                         ))}
                     </tbody>
                 </table>

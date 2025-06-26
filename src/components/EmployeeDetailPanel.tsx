@@ -98,7 +98,7 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
                 <div className="mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 text-sm rounded">
                     Weather data unavailable. Temperature defaulted to 0°F.
                 </div>
-            )}a
+            )}
         </div>
     );
 };
