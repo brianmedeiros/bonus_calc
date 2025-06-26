@@ -1,5 +1,7 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import type { EmployeeWithBonus } from "../types";
+import type { RootState } from "./store";
+import { calculateTotalBonus } from "../utils/employeeHelpers";
 
 interface EmployeeState {
   employees: EmployeeWithBonus[];
@@ -11,6 +13,22 @@ const initialState: EmployeeState = {
   extraBonus: false,
 };
 
+// Async thunk to recalculate all bonuses based on current state
+export const updateAllBonuses = createAsyncThunk(
+  "employees/updateAllBonuses",
+  async (_, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    const { employees, extraBonus } = state.employees;
+
+    const updatedEmployees = employees.map((emp) => {
+      const { total } = calculateTotalBonus(emp, extraBonus);
+      return { ...emp, bonus: total };
+    });
+
+    dispatch(setEmployees(updatedEmployees));
+  }
+);
+
 const employeeSlice = createSlice({
   name: "employees",
   initialState,
@@ -21,14 +39,8 @@ const employeeSlice = createSlice({
 
     toggleExtraBonus(state) {
       state.extraBonus = !state.extraBonus;
-      state.employees = state.employees.map(emp => ({
-        ...emp,
-        bonus: state.extraBonus ? emp.bonus * 1.05 : emp.bonus / 1.05,
-      }));
     },
-
   },
-
 });
 
 export const { setEmployees, toggleExtraBonus } = employeeSlice.actions;

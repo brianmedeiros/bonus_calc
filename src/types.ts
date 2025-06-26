@@ -12,6 +12,7 @@ export interface EmployeeWithBonus extends Employee {
     bonus: number;
     bonusDate?: string;
     temperatureF?: number;
+    weatherError?: boolean;
 }
 
 export interface WeatherData {

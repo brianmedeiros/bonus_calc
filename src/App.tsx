@@ -19,24 +19,34 @@ const App: React.FC = () => {
                     const partial = raw as Omit<Employee, "id">;
                     const fullEmployee: Employee = { ...partial, id: uuidv4() };
 
-                    const { temperatureF, dateUsed } = await fetchWeather(fullEmployee.birthday);
+                    let temperatureF = 0;
+                    let bonusDate = "";
+                    let weatherError = false;
+
+                    try {
+                        const weather = await fetchWeather(fullEmployee.birthday);
+                        temperatureF = weather.temperatureF;
+                        bonusDate = weather.dateUsed;
+                    } catch (e) {
+                        weatherError = true;
+                    }
 
                     const { total } = calculateTotalBonus(
                         {
                             ...fullEmployee,
-                            bonus: 0, // placeholder to satisfy type
-                            bonusDate: "",
+                            bonus: 0,
+                            bonusDate,
                             temperatureF,
                         },
                         false
                     );
 
-
                     return {
                         ...fullEmployee,
                         bonus: total,
-                        bonusDate: dateUsed,
+                        bonusDate,
                         temperatureF,
+                        weatherError,
                     };
                 })
             );

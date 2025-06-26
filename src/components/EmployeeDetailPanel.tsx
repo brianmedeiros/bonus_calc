@@ -23,7 +23,7 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
     if (!employee) {
         return (
             <div
-                className={`fixed top-0 right-0 h-full bg-orange-200 text-black shadow-lg transition-transform duration-300 ease-in-out z-50
+                className={`fixed top-0 right-0 h-full bg-gradient-to-b from-orange-300 to-orange-500 text-black shadow-xl transition-transform duration-300 ease-in-out z-50
         ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
         w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
             >
@@ -42,11 +42,11 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
             role="dialog"
             aria-modal="true"
             aria-labelledby="employee-panel-title"
-            className={`fixed top-0 right-0 h-full bg-gradient-to-b from-orange-200 to-orange-500 text-black shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-transform duration-300 ease-in-out z-50
-            ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
-            w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
+            className={`fixed top-0 right-0 h-full bg-gradient-to-b from-orange-300 to-orange-500 text-black shadow-xl transition-transform duration-300 ease-in-out z-50
+        ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
+        w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
         >
-            <div className="flex justify-between items-center p-4 border-b border-orange-300">
+            <div className="flex justify-between items-center p-4 border-b border-orange-400">
                 <h2 id="employee-panel-title" className="text-xl font-semibold">
                     {employee.fName} {employee.lName}
                 </h2>
@@ -74,27 +74,31 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
                 <p><strong>Manager:</strong> {getManagerName(employee)}</p>
             </div>
 
-            <div className="mt-4 bg-gray-50 p-3 rounded border text-sm space-y-1 border-l-4 border-blue-300 pl-3">
+            <div className="mt-4 bg-gray-50 p-3 rounded border text-sm space-y-1 border-l-4 border-blue-300 pl-3 mx-4 mb-4">
                 <h3 className="font-semibold text-gray-700 mb-1">Bonus Breakdown:</h3>
                 <p>
-                    <strong>Base Bonus:</strong>{" "}
-                    {((base / employee.salary) * 100).toFixed(0)}% →{" "}
-                    {formatCurrency(base)}
+                    <strong>Base Bonus:</strong> {((base / employee.salary) * 100).toFixed(0)}% → {formatCurrency(base)}
                 </p>
                 <p><strong>Bonus Date:</strong> {employee.bonusDate}</p>
                 <p><strong>Weather Temp:</strong> {temp}°F</p>
                 <p>
-                    <strong>Weather Bonus:</strong>{" "}
-                    {((weather / employee.salary) * 100).toFixed(0)}% →{" "}
-                    {formatCurrency(weather)}
+                    <strong>Weather Bonus:</strong> {((weather / employee.salary) * 100).toFixed(0)}% → {formatCurrency(weather)}
                 </p>
                 {extraBonus && (
                     <p>
-                        <strong>Extra Bonus:</strong> 5% →{" "}
-                        {formatCurrency(extra)} (toggle enabled)
+                        <strong>Extra Bonus:</strong> 5% → {formatCurrency(extra)}
                     </p>
                 )}
+                <hr className="border-t border-gray-300 my-2" />
+                <p><strong>Total Bonus:</strong> {formatCurrency(total)}</p>
             </div>
+
+            {/* weather warning */}
+            {employee.weatherError && (
+                <div className="mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 text-sm rounded">
+                    Weather data unavailable. Temperature defaulted to 0°F.
+                </div>
+            )}a
         </div>
     );
 };
