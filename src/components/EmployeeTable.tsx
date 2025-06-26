@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { useAppDispatch } from "../store/hooks";
-import { toggleExtraBonus, updateAllBonuses } from "../store/employeeSlice";
 import { calculateTotalBonus } from "../utils/employeeHelpers";
 import EmployeeDetailPanel from "./EmployeeDetailPanel";
 import EmployeeTableRow from "./EmployeeTableRow";
 import EmployeeTableHeader from "./EmployeeTableHeader";
+import ToggleBonusButton from "./ToggleBonusButton";
 
 
 const EmployeeTable: React.FC = () => {
-    const dispatch = useAppDispatch();
     const { employees, extraBonus } = useSelector((state: RootState) => state.employees);
 
     // Panel state
@@ -39,21 +37,14 @@ const EmployeeTable: React.FC = () => {
 
     return (
         <div className="p-4 min-h-screen">
+
             {/* Toggle Bonus Button */}
-            <button
-                onClick={() => {
-                    dispatch(toggleExtraBonus());
-                    dispatch(updateAllBonuses());
-                    setIsPanelOpen(false);
+            <ToggleBonusButton
+                onResetSelection={() => {
                     setSelectedEmployeeId(null);
+                    setIsPanelOpen(false);
                 }}
-                className={`mb-4 px-4 py-2 rounded font-semibold transition-colors duration-200 border ${extraBonus
-                    ? "bg-green-600 text-white border-green-900 hover:bg-green-700"
-                    : "bg-red-300 text-red-800 border-red-800 hover:bg-red-400"
-                    }`}
-            >
-                {extraBonus ? "Extra Bonus ON (+5%)" : "Extra Bonus OFF"}
-            </button>
+            />
 
             {/* Table */}
             <div className="overflow-x-auto bg-white rounded shadow-md">
