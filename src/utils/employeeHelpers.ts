@@ -37,3 +37,35 @@ export function calculateFullBonus(
 
     return employee.salary * (base + weather + extra);
 }
+
+// calculate total bonus breakdown
+export function calculateTotalBonus(
+  employee: EmployeeWithBonus,
+  extraBonus: boolean
+): {
+  base: number;
+  weather: number;
+  extra: number;
+  total: number;
+} {
+  const basePct = {
+    Executive: 0.2,
+    Supervisor: 0.1,
+    Manager: 0.08,
+    Employee: 0.05,
+  }[employee.team];
+
+  const temp = employee.temperatureF ?? 0;
+  let weatherPct = 0;
+  if (temp > 86) weatherPct = 0.1;
+  else if (temp >= 68) weatherPct = 0.05;
+
+  const extraPct = extraBonus ? 0.05 : 0;
+
+  const base = employee.salary * basePct;
+  const weather = employee.salary * weatherPct;
+  const extra = employee.salary * extraPct;
+  const total = base + weather + extra;
+
+  return { base, weather, extra, total };
+}
