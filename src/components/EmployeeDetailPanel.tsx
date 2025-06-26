@@ -42,9 +42,9 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
             role="dialog"
             aria-modal="true"
             aria-labelledby="employee-panel-title"
-            className={`fixed top-0 right-0 h-full bg-orange-200 text-black shadow-lg transition-transform duration-300 ease-in-out z-50
-      ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
-      w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
+            className={`fixed top-0 right-0 h-full bg-gradient-to-b from-orange-200 to-orange-500 text-black shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-transform duration-300 ease-in-out z-50
+            ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
+            w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
         >
             <div className="flex justify-between items-center p-4 border-b border-orange-300">
                 <h2 id="employee-panel-title" className="text-xl font-semibold">
