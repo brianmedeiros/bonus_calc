@@ -3,19 +3,11 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { useAppDispatch } from "../store/hooks";
 import { toggleExtraBonus, updateAllBonuses } from "../store/employeeSlice";
-import { calculateTotalBonus, formatCurrency } from "../utils/employeeHelpers";
+import { calculateTotalBonus } from "../utils/employeeHelpers";
 import EmployeeDetailPanel from "./EmployeeDetailPanel";
-import type { EmployeeWithBonus } from "../types";
 import EmployeeTableRow from "./EmployeeTableRow";
+import EmployeeTableHeader from "./EmployeeTableHeader";
 
-const BonusCell: React.FC<{ emp: EmployeeWithBonus; extraBonus: boolean }> = ({ emp, extraBonus }) => {
-    const { total } = calculateTotalBonus(emp, extraBonus);
-    return (
-        <td className={`p-2 ${extraBonus ? "text-green-800" : "text-black"}`}>
-            {formatCurrency(total)}
-        </td>
-    );
-};
 
 const EmployeeTable: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -66,53 +58,22 @@ const EmployeeTable: React.FC = () => {
             {/* Table */}
             <div className="overflow-x-auto bg-white rounded shadow-md">
                 <table className="min-w-full border border-gray-300 text-black" aria-label="Employee bonus table">
-                    <thead className="bg-gray-100 text-left">
-                        <tr>
-                            <th
-                                className="p-2 border-b cursor-pointer select-none"
-                                onClick={() => {
-                                    if (sortKey === "lName") {
-                                        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                                    } else {
-                                        setSortKey("lName");
-                                        setSortOrder("asc");
-                                    }
-                                }}
-                            >
-                                Last Name{" "}
-                                <span className="text-blue-400">
-                                    {sortKey === "lName"
-                                        ? sortOrder === "asc"
-                                            ? "▲"
-                                            : "▼"
-                                        : "–"}
-                                </span>
-                            </th>
-                            <th className="p-2 border-b">Birthday</th>
-                            <th
-                                className="p-2 border-b cursor-pointer select-none"
-                                onClick={() => {
-                                    if (sortKey === "bonus") {
-                                        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                                    } else {
-                                        setSortKey("bonus");
-                                        setSortOrder("asc");
-                                    }
-                                }}
-                            >
-                                Bonus{" "}
-                                <span className="text-blue-400">
-                                    {sortKey === "bonus"
-                                        ? sortOrder === "asc"
-                                            ? "▲"
-                                            : "▼"
-                                        : "-"}
-                                </span>
-                            </th>
-                        </tr>
-                    </thead>
+                    {/* Table Header */}
+                    <EmployeeTableHeader
+                        sortKey={sortKey}
+                        sortOrder={sortOrder}
+                        onSortChange={(key) => {
+                            if (sortKey === key) {
+                                setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                            } else {
+                                setSortKey(key);
+                                setSortOrder("asc");
+                            }
+                        }}
+                    />
 
                     <tbody>
+                        {/* Each Employee Row */}
                         {sortedEmployees.map((emp) => (
                             <EmployeeTableRow
                                 key={emp.id}
