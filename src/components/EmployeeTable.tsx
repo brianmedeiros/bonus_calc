@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
 import { toggleExtraBonus } from "../store/employeeSlice";
-import type { EmployeeWithBonus } from "../types";
-import { getManagerName, calculateTotalBonus } from "../utils/employeeHelpers";
+import { calculateTotalBonus, formatCurrency } from "../utils/employeeHelpers";
 import EmployeeDetailPanel from "./EmployeeDetailPanel";
 
 const EmployeeTable: React.FC = () => {
@@ -47,8 +46,8 @@ const EmployeeTable: React.FC = () => {
                     setSelectedEmployeeId(null);
                 }}
                 className={`mb-4 px-4 py-2 rounded font-semibold transition-colors duration-200 border ${extraBonus
-                        ? "bg-green-600 text-white border-green-900 hover:bg-green-700"
-                        : "bg-red-300 text-red-800 border-red-800 hover:bg-red-400"
+                    ? "bg-green-600 text-white border-green-900 hover:bg-green-700"
+                    : "bg-red-300 text-red-800 border-red-800 hover:bg-red-400"
                     }`}
             >
                 {extraBonus ? "Extra Bonus ON (+5%)" : "Extra Bonus OFF"}
@@ -130,10 +129,7 @@ const EmployeeTable: React.FC = () => {
                                     </td>
                                     <td className="p-2">{emp.birthday}</td>
                                     <td className={`p-2 ${extraBonus ? "text-green-800" : "text-black"}`}>
-                                        {total.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                        })}
+                                        {formatCurrency(total)}
                                     </td>
                                 </tr>
                             );

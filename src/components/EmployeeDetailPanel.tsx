@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import type { EmployeeWithBonus } from "../types";
-import { getManagerName, calculateTotalBonus } from "../utils/employeeHelpers";
+import { getManagerName, calculateTotalBonus, formatCurrency } from "../utils/employeeHelpers";
 
 interface Props {
     employee: EmployeeWithBonus | null;
@@ -62,12 +62,12 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
             <div className="p-4 space-y-2">
                 <p><strong>Team:</strong> {employee.team}</p>
                 <p><strong>Title:</strong> {employee.title}</p>
-                <p><strong>Salary:</strong> {employee.salary.toLocaleString("en-US", { style: "currency", currency: "USD" })}</p>
+                <p><strong>Salary:</strong> {formatCurrency(employee.salary)}</p>
                 <p><strong>Birthday:</strong> {employee.birthday}</p>
                 <p>
                     <strong>Bonus:</strong>{" "}
                     <span className={extraBonus ? "text-green-800" : "text-black"}>
-                        {total.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+                        {formatCurrency(total)}
                     </span>
                 </p>
                 <p><strong>Date for Bonus:</strong> {employee.bonusDate}</p>
@@ -79,19 +79,19 @@ const EmployeeDetailPanel: React.FC<Props> = ({ employee, isOpen, onClose }) => 
                 <p>
                     <strong>Base Bonus:</strong>{" "}
                     {((base / employee.salary) * 100).toFixed(0)}% →{" "}
-                    {base.toLocaleString("en-US", { style: "currency", currency: "USD" })} for {employee.team}
+                    {formatCurrency(base)}
                 </p>
                 <p><strong>Bonus Date:</strong> {employee.bonusDate}</p>
                 <p><strong>Weather Temp:</strong> {temp}°F</p>
                 <p>
                     <strong>Weather Bonus:</strong>{" "}
                     {((weather / employee.salary) * 100).toFixed(0)}% →{" "}
-                    {weather.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+                    {formatCurrency(weather)}
                 </p>
                 {extraBonus && (
                     <p>
                         <strong>Extra Bonus:</strong> 5% →{" "}
-                        {extra.toLocaleString("en-US", { style: "currency", currency: "USD" })} (toggle enabled)
+                        {formatCurrency(extra)} (toggle enabled)
                     </p>
                 )}
             </div>
