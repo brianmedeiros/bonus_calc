@@ -25,6 +25,7 @@ const App: React.FC = () => {
                         ...fullEmployee,
                         bonus,
                         bonusDate: dateUsed,
+                        temperatureF,
                     };
                 })
             );

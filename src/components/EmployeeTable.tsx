@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
 import { toggleExtraBonus } from "../store/employeeSlice";
 import EmployeeDetailPanel from "./EmployeeDetailPanel";
+import { calculateFullBonus } from "../utils/employeeHelpers";
 
 
 const EmployeeTable: React.FC = () => {
@@ -121,7 +122,7 @@ const EmployeeTable: React.FC = () => {
                                 </td>
 
                                 <td className="p-2">{emp.birthday}</td>
-                                <td className={`p-2 font-medium ${extraBonus ? "text-green-800" : "text-black"}`}>{emp.bonus.toLocaleString("en-US", { style: "currency", currency: "USD",})}</td>
+                                <td className={`p-2 font-medium ${extraBonus ? "text-green-800" : "text-black"}`}>{calculateFullBonus(emp, extraBonus).toLocaleString("en-us", {style:"currency", currency:"USD"})}</td>
                             </tr>
                         ))}
                     </tbody>
