@@ -7,13 +7,13 @@ import EmployeeTableRow from "./EmployeeTableRow";
 import EmployeeTableHeader from "./EmployeeTableHeader";
 import ToggleBonusButton from "./ToggleBonusButton";
 
-
 const EmployeeTable: React.FC = () => {
     const { employees, extraBonus } = useSelector((state: RootState) => state.employees);
 
     // Panel state
     const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [lastFocusedElement, setLastFocusedElement] = useState<HTMLElement | null>(null);
 
     const selectedEmployee =
         employees.find((emp) => emp.id === selectedEmployeeId) || null;
@@ -38,7 +38,6 @@ const EmployeeTable: React.FC = () => {
     return (
         <div className="p-4 min-h-screen">
 
-            {/* Toggle Bonus Button */}
             <ToggleBonusButton
                 onResetSelection={() => {
                     setSelectedEmployeeId(null);
@@ -46,10 +45,11 @@ const EmployeeTable: React.FC = () => {
                 }}
             />
 
-            {/* Table */}
             <div className="overflow-x-auto bg-white rounded shadow-md">
-                <table className="min-w-full border border-gray-300 text-black" aria-label="Employee bonus table">
-                    {/* Table Header */}
+                <table
+                    className="min-w-full border border-gray-300 text-black"
+                    aria-label="Employee bonus table"
+                >
                     <EmployeeTableHeader
                         sortKey={sortKey}
                         sortOrder={sortOrder}
@@ -64,13 +64,13 @@ const EmployeeTable: React.FC = () => {
                     />
 
                     <tbody>
-                        {/* Each Employee Row */}
                         {sortedEmployees.map((emp) => (
                             <EmployeeTableRow
                                 key={emp.id}
                                 employee={emp}
                                 extraBonus={extraBonus}
                                 onSelect={(id) => {
+                                    setLastFocusedElement(document.activeElement as HTMLElement);
                                     setSelectedEmployeeId(id);
                                     setIsPanelOpen(true);
                                 }}
@@ -80,10 +80,10 @@ const EmployeeTable: React.FC = () => {
                 </table>
             </div>
 
-            {/* Slide-out Panel */}
             <EmployeeDetailPanel
                 employee={selectedEmployee}
                 isOpen={isPanelOpen}
+                returnFocusTo={lastFocusedElement}
                 onClose={() => {
                     setIsPanelOpen(false);
                     setSelectedEmployeeId(null);

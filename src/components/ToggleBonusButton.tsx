@@ -8,14 +8,13 @@ interface Props {
     onResetSelection?: () => void;
 }
 
-const ToggleBonusButton: React.FC<Props> = ({ onResetSelection }) => {
+const ToggleBonusButton: React.FC<Props> = () => {
     const dispatch = useAppDispatch();
     const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
 
     const handleClick = () => {
         dispatch(toggleExtraBonus());
         dispatch(updateAllBonuses());
-        if (onResetSelection) onResetSelection();
     };
 
     return (
