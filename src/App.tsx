@@ -27,7 +27,7 @@ const App: React.FC = () => {
                         const weather = await fetchWeather(fullEmployee.birthday);
                         temperatureF = weather.temperatureF;
                         bonusDate = weather.dateUsed;
-                    } catch (e) {
+                    } catch {
                         weatherError = true;
                     }
 
