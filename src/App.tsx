@@ -60,7 +60,7 @@ const App: React.FC = () => {
     return (
         <div
             className="min-h-screen w-full bg-cover bg-no-repeat bg-top bg-center"
-            style={{ backgroundImage: "url('/bg.png')" }}
+            style={{ backgroundImage: "url('/bonus_calc/bg.png')" }}
         >
             <div className="container mx-auto">
                 <EmployeeTable />
