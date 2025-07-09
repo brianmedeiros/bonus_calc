@@ -1,17 +1,38 @@
 import type { EmployeeWithBonus } from "../types";
 
-// Get the manager's name based on the team/title
-export function getManagerName(emp: EmployeeWithBonus): string {
-    if (emp.team.startsWith("Executive")) return "None";
-    if (emp.team.startsWith("Supervisor")) return "Moshe Roth";
-    if (emp.team.startsWith("Manager")) return "Chaim Stark";
-    if (emp.team.startsWith("Employee")) {
-        return emp.title.includes("Website") ? "Miriam Weiss" : "Yehuda Gold";
+// Get a manager name based on the employee team
+export function getManagerName(
+    emp: EmployeeWithBonus,
+    allEmployees: EmployeeWithBonus[]
+): string {
+    if (emp.team === "Executive") return "None";
+
+    // Define who manages whom
+    const managerTeamByTeam: Record<
+        Exclude<EmployeeWithBonus["team"], "Executive">,
+        EmployeeWithBonus["team"]
+    > = {
+        Supervisor: "Executive",
+        Manager: "Supervisor",
+        Employee: "Manager",
+    };
+
+    // Special lookup for employees
+    if (emp.team === "Employee" && emp.title.includes("Website")) {
+        const websiteManager = allEmployees.find(
+            (e) => e.team === "Manager" && e.title.includes("Website")
+        );
+        return websiteManager
+            ? `${websiteManager.fName} ${websiteManager.lName}`
+            : "Unknown";
     }
-    return "Unknown";
+
+    const targetTeam = managerTeamByTeam[emp.team as keyof typeof managerTeamByTeam];
+    const manager = allEmployees.find((e) => e.team === targetTeam);
+    return manager ? `${manager.fName} ${manager.lName}` : "Unknown";
 }
 
-// Format currency as "$00,000.00"
+// Format a number as USD currency
 export function formatCurrency(value: number): string {
     return `${value.toLocaleString("en-US", {
         style: "currency",
@@ -20,7 +41,7 @@ export function formatCurrency(value: number): string {
     })}`;
 }
 
-// Central bonus breakdown calculator
+// Calculate the full breakdown of an employee's bonus
 export function calculateTotalBonus(
     employee: EmployeeWithBonus,
     extraBonus: boolean

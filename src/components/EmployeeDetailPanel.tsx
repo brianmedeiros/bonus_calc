@@ -9,7 +9,7 @@ interface Props {
     employee: EmployeeWithBonus | null;
     isOpen: boolean;
     onClose: () => void;
-    returnFocusTo: HTMLElement | null;
+    returnFocusTo?: HTMLElement | null;
 }
 
 const EmployeeDetailPanel: React.FC<Props> = ({
@@ -18,47 +18,49 @@ const EmployeeDetailPanel: React.FC<Props> = ({
     onClose,
     returnFocusTo,
 }) => {
-    const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
     const panelRef = useRef<HTMLDivElement>(null);
+    const allEmployees = useSelector((state: RootState) => state.employees.employees);
+    const extraBonus = useSelector((state: RootState) => state.employees.extraBonus);
 
-    // Focus on panel when opened
+    // Manage focus when panel opens/closes
     useEffect(() => {
         if (isOpen && employee && panelRef.current) {
             panelRef.current.focus();
         }
-    }, [employee, isOpen]);
+    }, [isOpen, employee]);
 
-    // Return focus on close
     useEffect(() => {
-        if (!isOpen && returnFocusTo) {
-            returnFocusTo.focus();
-        }
-    }, [isOpen, returnFocusTo]);
-
-    // ESC to close
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 onClose();
             }
         };
+
         if (isOpen) {
-            window.addEventListener("keydown", handleKeyDown);
+            window.addEventListener("keydown", handleEsc);
         }
+
         return () => {
-            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keydown", handleEsc);
         };
     }, [isOpen, onClose]);
+
+    useEffect(() => {
+        return () => {
+            if (returnFocusTo) {
+                returnFocusTo.focus();
+            }
+        };
+    }, [returnFocusTo]);
 
     if (!employee) {
         return (
             <div
-                className={`fixed top-0 right-0 h-full transition-transform duration-300 ease-in-out z-50
-        ${isOpen ? "translate-x-0" : "translate-x-full pointer-events-none"}
-        w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none
-        bg-gradient-to-t from-orange-400 to-orange-500 text-black shadow-2xl`}
+                className={`fixed top-0 right-0 h-full bg-orange-100 text-black shadow-lg transition-transform duration-300 ease-in-out z-50
+        ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
+        w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
             >
-                <div className="p-4 text-gray-100 italic">No employee selected</div>
+                <div className="p-4 text-gray-400 italic">No employee selected</div>
             </div>
         );
     }
@@ -72,26 +74,23 @@ const EmployeeDetailPanel: React.FC<Props> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="employee-panel-title"
-            className={`fixed top-0 right-0 h-full transition-transform duration-300 ease-in-out z-50
-        ${isOpen ? "translate-x-0" : "translate-x-full pointer-events-none"}
-        w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none
-        bg-gradient-to-t from-orange-400 to-orange-500 text-black shadow-2xl`}
+            className={`fixed top-0 right-0 h-full bg-gradient-to-b from-orange-300 to-orange-100 text-black shadow-2xl transition-transform duration-300 ease-in-out z-50
+        ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-full pointer-events-none"}
+        w-[90%] sm:w-[80%] md:w-[400px] focus:outline-none`}
         >
-            {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-orange-300">
                 <h2 id="employee-panel-title" className="text-xl font-semibold">
                     {employee.fName} {employee.lName}
                 </h2>
                 <button
                     onClick={onClose}
-                    className="text-red-100 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-red-300 rounded"
+                    className="text-red-500 text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-red-400 rounded"
                     aria-label="Close employee details"
                 >
                     &times;
                 </button>
             </div>
 
-            {/* Details */}
             <div className="p-4 space-y-2">
                 <p><strong>Team:</strong> {employee.team}</p>
                 <p><strong>Title:</strong> {employee.title}</p>
@@ -104,18 +103,10 @@ const EmployeeDetailPanel: React.FC<Props> = ({
                     </span>
                 </p>
                 <p><strong>Date for Bonus:</strong> {employee.bonusDate}</p>
-                <p><strong>Manager:</strong> {getManagerName(employee)}</p>
+                <p><strong>Manager:</strong> {getManagerName(employee, allEmployees)}</p>
             </div>
 
-            {/* Breakdown */}
             <EmployeeDetailsBreakdown employee={employee} />
-
-            {/* weather warning */}
-            {employee.weatherError && (
-                <div className="mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 text-sm rounded">
-                    Weather data unavailable. Temperature defaulted to 0°F.
-                </div>
-            )}
         </div>
     );
 };
